@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="TechStore.Api/TechStore.Api.csproj" />
+  <Project Path="TechStore.Wpf/TechStore.Wpf.csproj" Id="51f4e09d-7f43-4362-a2d9-b08e5d0322e7" />
+</Solution>

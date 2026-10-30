@@ -1,0 +1,132 @@
+﻿<Window x:Class="TechStore.Wpf.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="TechStore Management" Height="550" Width="800"
+        WindowStartupLocation="CenterScreen">
+
+    <Window.Resources>
+        <!-- Convertor care transformă true/false în Visible/Collapsed -->
+        <BooleanToVisibilityConverter x:Key="BoolToVis" />
+    </Window.Resources>
+
+    <Grid Margin="10">
+        <TabControl>
+
+            <!-- ================= TAB PRODUSE ================= -->
+            <TabItem Header="Produse" DataContext="{Binding ProdusVM}">
+                <Grid Margin="10">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <!-- Row 0: Bara de Căutare -->
+                        <RowDefinition Height="*" />
+                        <!-- Row 1: DataGrid + ProgressBar -->
+                        <RowDefinition Height="Auto" />
+                        <!-- Row 2: Formular -->
+                        <RowDefinition Height="Auto" />
+                        <!-- Row 3: Butoane -->
+                    </Grid.RowDefinitions>
+
+                    <!-- 0. BARA DE CĂUTARE (Row 0) -->
+                    <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,10">
+                        <TextBlock Text="Căutare produs:" VerticalAlignment="Center" Margin="0,0,10,0" FontWeight="Bold"/>
+                        <TextBox Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" Width="250" Padding="3"/>
+                    </StackPanel>
+
+                    <!-- 1. DATA GRID (Row 1) -->
+                    <DataGrid Grid.Row="1" 
+                              ItemsSource="{Binding ListaProduse}" 
+                              SelectedItem="{Binding ProdusSelectat}"
+                              AutoGenerateColumns="True" 
+                              IsReadOnly="True" 
+                              Margin="0,0,0,10" />
+
+                    <!-- BARA DE ÎNCĂRCARE (Stă tot pe Row 1, lipită sus peste tabel) -->
+                    <ProgressBar Grid.Row="1" 
+                                 Height="4" 
+                                 VerticalAlignment="Top" 
+                                 IsIndeterminate="True" 
+                                 Visibility="{Binding IsBusy, Converter={StaticResource BoolToVis}}" />
+
+                    <!-- 2. FORMULAR INTRODUCERE (Row 2) -->
+                    <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="0,5,0,15" HorizontalAlignment="Center">
+                        <TextBlock Text="Nume:" VerticalAlignment="Center" Margin="5,0"/>
+                        <TextBox Text="{Binding Nume, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" Width="150" Margin="5,0"/>
+
+                        <TextBlock Text="Preț:" VerticalAlignment="Center" Margin="15,0,5,0"/>
+                        <TextBox Text="{Binding Pret, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" Width="80" Margin="5,0"/>
+
+                        <TextBlock Text="Stoc:" VerticalAlignment="Center" Margin="15,0,5,0"/>
+                        <TextBox Text="{Binding Stoc, UpdateSourceTrigger=PropertyChanged}" Width="60" Margin="5,0"/>
+                    </StackPanel>
+
+                    <!-- 3. BUTOANE (Row 3) -->
+                    <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Right">
+                        <Button Content="Încărcare" Command="{Binding IncarcaProduseCommand}" Width="100" Height="30" Margin="5,0"/>
+                        <Button Content="Salvează" Command="{Binding SalveazaProdusCommand}" Width="100" Height="30" Margin="5,0"/>
+                        <Button Content="Șterge" Command="{Binding StergeProdusCommand}" Width="100" Height="30" Margin="5,0"/>
+                    </StackPanel>
+                </Grid>
+            </TabItem>
+
+            <!-- ================= TAB COMENZI ================= -->
+            <TabItem Header="Comenzi" DataContext="{Binding ComandaVM}">
+                <Grid Margin="10">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <!-- Row 0: Bara de Căutare -->
+                        <RowDefinition Height="*" />
+                        <!-- Row 1: DataGrid + ProgressBar -->
+                        <RowDefinition Height="Auto" />
+                        <!-- Row 2: Formular -->
+                        <RowDefinition Height="Auto" />
+                        <!-- Row 3: Butoane -->
+                    </Grid.RowDefinitions>
+
+                    <!-- 0. BARA DE CĂUTARE (Row 0) -->
+                    <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,10">
+                        <TextBlock Text="Căutare comandă:" VerticalAlignment="Center" Margin="0,0,10,0" FontWeight="Bold"/>
+                        <TextBox Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" Width="250" Padding="3"/>
+                    </StackPanel>
+
+                    <!-- 1. DATA GRID (Row 1) -->
+                    <DataGrid Grid.Row="1" 
+                              ItemsSource="{Binding ListaComenzi}" 
+                              SelectedItem="{Binding SelectedOrder}"
+                              AutoGenerateColumns="True" 
+                              IsReadOnly="True" 
+                              Margin="0,0,0,10" />
+
+                    <!-- BARA DE ÎNCĂRCARE (Stă tot pe Row 1, lipită sus peste tabel) -->
+                    <ProgressBar Grid.Row="1" 
+                                 Height="4" 
+                                 VerticalAlignment="Top" 
+                                 IsIndeterminate="True" 
+                                 Visibility="{Binding IsBusy, Converter={StaticResource BoolToVis}}" />
+
+                    <!-- 2. FORMULAR INTRODUCERE (Row 2) -->
+                    <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="0,5,0,15" HorizontalAlignment="Center">
+                        <TextBlock Text="Produs / Obiect:" VerticalAlignment="Center" Margin="5,0"/>
+                        <ComboBox ItemsSource="{Binding ListaProduse}"
+                                  SelectedItem="{Binding ProdusSelectat}"
+                                  DisplayMemberPath="Nume"
+                                  DropDownOpened="ComboBox_DropDownOpened"
+                                  Width="150" />
+
+                        <TextBlock Text="Cantitate:" VerticalAlignment="Center" Margin="15,0,5,0"/>
+                        <TextBox Text="{Binding Cantitate, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" Width="80" Margin="5,0"/>
+                    </StackPanel>
+
+                    <!-- 3. BUTOANE (Row 3) -->
+                    <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Right">
+                        <Button Content="Încărcare" Command="{Binding LoadOrdersCommand}" Width="100" Height="30" Margin="5,0"/>
+                        <Button Content="Plasare Comandă" Command="{Binding SaveOrderCommand}" Width="120" Height="30" Margin="5,0"/>
+                        <Button Content="Șterge Comandă" Command="{Binding DeleteOrderCommand}" Width="120" Height="30" Margin="5,0"/>
+                        <TextBlock Text="Cost Comanda:" VerticalAlignment="Center" Margin="15,0,5,0" FontWeight="Bold"/>
+                        <TextBlock Text="{Binding TotalPlata, StringFormat={}{0:N2} LEI}" VerticalAlignment="Center" Margin="0,0,5,0" FontWeight="Bold"/>
+                    </StackPanel>
+                </Grid>
+            </TabItem>
+
+        </TabControl>
+    </Grid>
+</Window>
